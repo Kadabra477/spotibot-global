@@ -1,4 +1,4 @@
-name: Compilar librespot para Linux
+﻿name: Compilar librespot para Linux
 
 on:
   workflow_dispatch:
@@ -16,11 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compilar librespot con dependencias bloqueadas (--locked)
+      - name: Compilar librespot desde repo oficial con Cargo.lock fijo
         run: |
-          cargo install librespot --locked --no-default-features --features "native-tls"
-          cp ~/.cargo/bin/librespot ./librespot
-          strip ./librespot
+          git clone --depth 1 --branch v0.8.0 https://github.com/librespot-org/librespot.git /tmp/librespot-src
+          cd /tmp/librespot-src
+          cargo update -p vergen --precise 9.0.6 || true
+          cargo build --release --no-default-features --features "native-tls"
+          cp /tmp/librespot-src/target/release/librespot $GITHUB_WORKSPACE/librespot
+          strip $GITHUB_WORKSPACE/librespot
 
       - name: Guardar binario en el repositorio
         run: |
