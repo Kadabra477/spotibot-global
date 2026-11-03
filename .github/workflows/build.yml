@@ -16,9 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compilar librespot sin dependencias de audio externas
+      - name: Compilar librespot con dependencias bloqueadas (--locked)
         run: |
-          cargo install librespot --no-default-features --features "native-tls"
+          cargo install librespot --locked --no-default-features --features "native-tls"
           cp ~/.cargo/bin/librespot ./librespot
           strip ./librespot
 
