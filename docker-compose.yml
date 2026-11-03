@@ -1,0 +1,10 @@
+services:
+  spoticord:
+    build: .
+    container_name: spoticord-global
+    restart: unless-stopped
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CLIENT_ID=${CLIENT_ID}
+    volumes:
+      - ./data:/app/data
